@@ -1,113 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Chatbot</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .chatbox {
-      width: 350px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-    }
-    .header {
-      background: #4CAF50;
-      color: white;
-      padding: 10px;
-      text-align: center;
-      border-radius: 10px 10px 0 0;
-    }
-    .messages {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-    }
-    .message {
-      margin: 8px 0;
-      padding: 8px;
-      border-radius: 5px;
-      max-width: 80%;
-    }
-    .user {
-      background: #DCF8C6;
-      align-self: flex-end;
-    }
-    .bot {
-      background: #eee;
-      align-self: flex-start;
-    }
-    .input-area {
-      display: flex;
-      border-top: 1px solid #ccc;
-    }
-    input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      outline: none;
-    }
-    button {
-      padding: 10px;
-      border: none;
-      background: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stranger Things AI Chat</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #000;
+}
+
+.app {
+  max-width: 420px;
+  height: 100vh;
+  margin: auto;
+  background: #0b141a;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.header {
+  background: #7a0000;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 0 15px red;
+}
+
+/* API KEY INPUT */
+.api-box {
+  padding: 8px;
+  background: #111;
+}
+.api-box input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+/* CHAT */
+.messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #0b141a;
+}
+
+.msg {
+  max-width: 75%;
+  padding: 8px 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.user {
+  background: #005c4b;
+  color: #fff;
+  margin-left: auto;
+}
+
+.bot {
+  background: #1f2c33;
+  color: #e9edef;
+  box-shadow: 0 0 8px red;
+}
+
+/* INPUT */
+.input {
+  display: flex;
+  padding: 8px;
+  background: #111;
+}
+.input input {
+  flex: 1;
+  border-radius: 20px;
+  border: none;
+  padding: 10px;
+  outline: none;
+}
+.input button {
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  border-radius: 50%;
+  border: none;
+  background: #7a0000;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<div class="chatbox">
-  <div class="header">My Chatbot</div>
-  <div class="messages" id="messages"></div>
-  <div class="input-area">
-    <input type="text" id="input" placeholder="Type a message..." />
-    <button onclick="sendMessage()">Send</button>
+<div class="app">
+  <div class="header">STRANGER THINGS AI 👁️</div>
+
+  <div class="api-box">
+    <input id="apiKey" placeholder="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">
+  </div>
+
+  <div class="messages" id="messages">
+    <div class="msg bot">I’m Eleven… I can hear you.</div>
+  </div>
+
+  <div class="input">
+    <input id="input" placeholder="Type a message...">
+    <button onclick="send()">➤</button>
   </div>
 </div>
 
 <script>
-  function sendMessage() {
-    const input = document.getElementById("input");
-    const msg = input.value.trim();
-    if (msg === "") return;
-
-    addMessage(msg, "user");
-    input.value = "";
-
-    setTimeout(() => {
-      botReply(msg);
-    }, 500);
+async function send() {
+  const apiKey = document.getElementById("apiKey").value.trim();
+  if (!apiKey) {
+    alert("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");
+    return;
   }
 
-  function addMessage(text, sender) {
-    const messages = document.getElementById("messages");
-    const div = document.createElement("div");
-    div.className = "message " + sender;
-    div.innerText = text;
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
+  const input = document.getElementById("input");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  addMessage(msg, "user");
+  input.value = "";
+
+  addMessage("The Upside Down is listening…", "bot");
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are Eleven from Stranger Things. Speak softly, emotionally, sometimes broken sentences. Dark but kind."
+          },
+          { role: "user", content: msg }
+        ]
+      })
+    });
+
+    const data = await res.json();
+    document.querySelector(".bot:last-child").remove();
+    addMessage(data.choices[0].message.content, "bot");
+
+  } catch (e) {
+    document.querySelector(".bot:last-child").remove();
+    addMessage("Something is wrong… it feels cold.", "bot");
   }
+}
 
-  function botReply(userMsg) {
-    let reply = "I didn't understand that.";
-
-    if (userMsg.toLowerCase().includes("hello")) reply = "Hello! 👋";
-    else if (userMsg.toLowerCase().includes("name")) reply = "I'm your chatbot 🤖";
-    else if (userMsg.toLowerCase().includes("bye")) reply = "Goodbye! 👋";
-
-    addMessage(reply, "bot");
-  }
+function addMessage(text, type) {
+  const div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerText = text;
+  document.getElementById("messages").appendChild(div);
+  document.getElementById("messages").scrollTop =
+    document.getElementById("messages").scrollHeight;
+}
 </script>
 
 </body>
